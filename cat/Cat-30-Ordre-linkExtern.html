@@ -370,7 +370,9 @@ function chargerQuestion(){
     document.getElementById("resultat").innerHTML = "";
     document.getElementById("resultat").style.backgroundColor = "";
     document.getElementById("resultat").style.padding = "";
-    document.getElementById("reponse").focus();
+    
+    // NE PAS mettre le focus automatiquement sur le champ de saisie
+    // Comme ça sur mobile, le clavier ne s'ouvre pas automatiquement
 }
 
 function questionSuivante() {
