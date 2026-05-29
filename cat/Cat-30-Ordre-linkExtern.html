@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Quiz vocabulaire</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial;
+    background:#f0f0f0;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+}
+
+#box{
+    background:white;
+    padding:20px;
+    border-radius:0;
+    max-width:100%;
+    width:100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Sur les grands écrans (ordinateurs), on peut limiter un peu */
+@media (min-width: 768px) {
+    #box {
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 10px;
+        min-height: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    body {
+        padding: 0 20px;
+    }
+}
+
+input{
+    width:100%;
+    padding:15px;
+    margin-top:10px;
+    font-size:18px;
+    box-sizing: border-box;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+button{
+    margin-top:10px;
+    padding:15px;
+    font-size:18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.button-group button {
+    flex: 1;
+    margin-top: 0;
+}
+
+.button-group button:first-child {
+    background-color: #2196f3;
+    color: white;
+}
+
+.button-group button:first-child:hover {
+    background-color: #0b7dda;
+}
+
+.button-group button:last-child {
+    background-color: #ff9800;
+    color: white;
+}
+
+.button-group button:last-child:hover {
+    background-color: #e68900;
+}
+
+.nav-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.nav-group button {
+    flex: 1;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.nav-group button:hover {
+    background-color: #45a049;
+}
+
+.nav-group button:active {
+    background-color: #3d8b40;
+}
+
+#question{
+    font-size:24px;
+    margin-bottom:15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+#resultat{
+    margin-top:15px;
+    font-weight:bold;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 8px;
+    word-wrap: break-word;
+}
+
+#reponse-affichee {
+    margin-top: 10px;
+    padding: 20px;
+    background-color: #e3f2fd;
+    border-left: 6px solid #2196f3;
+    border-radius: 8px;
+    display: none;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.score-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    color: #666;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    padding: 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="box">
+
+<h2>📚 Quiz de vocabulaire dans l'ordre</h2>
+
+<div id="question"></div>
+
+<input type="text" id="reponse" placeholder="Écrivez votre réponse ici...">
+
+<div class="button-group">
+    <button onclick="verifier()">✓ Valider</button>
+    <button onclick="afficherReponse()">👁 Afficher la réponse</button>
+</div>
+
+<div class="nav-group">
+    <button onclick="questionPrecedente()">◀ Précédente</button>
+    <button onclick="questionSuivante()">Suivante ▶</button>
+</div>
+
+<div id="reponse-affichee"></div>
+
+<div id="resultat"></div>
+
+<div class="score-container">
+    🏆 Score : <span id="score">0</span> / <span id="totalQuestions">0</span>
+</div>
+
+</div>
+
+<script>
+
+// ======================
+// VARIABLES GLOBALES
+// ======================
+
+let vocabulaire = [];
+let score = 0;
+let indexQuestion = 0;
+let questionActuelle = "";
+let bonneReponse1 = "";
+let bonneReponse2 = "";
+let questionsReussies = [];
+
+// ======================
+// CHARGER LE FICHIER VOCABULAIRE
+// ======================
+
+async function chargerVocabulaire() {
+    try {
+        // Charger le fichier vocaCat-30.txt
+        const response = await fetch('vocaCat-30.txt');
+        
+        if (!response.ok) {
+            throw new Error(`Impossible de charger vocabulaire.txt (HTTP ${response.status})`);
+        }
+        
+        const texte = await response.text();
+        
+        // Parser le contenu (même format que dans l'ancien fichier)
+        let lignes = texte.trim().split("\n");
+        
+        for(let ligne of lignes){
+            // Ignorer les lignes qui commencent par //
+            if(ligne.trim().startsWith("//")) continue;
+            
+            let morceaux = ligne.split("=");
+            
+            let question = morceaux[0]?.trim() || "";
+            let reponse1 = morceaux[1]?.trim() || "";
+            let reponse2 = morceaux[2]?.trim() || "";
+            
+            if(question && reponse1) {
+                vocabulaire.push([
+                    question,
+                    reponse1,
+                    reponse2
+                ]);
+            }
+        }
+        
+        if(vocabulaire.length === 0) {
+            throw new Error("Aucune donnée valide trouvée dans le fichier");
+        }
+        
+        // Initialiser le tableau des questions réussies
+        questionsReussies = new Array(vocabulaire.length).fill(false);
+        
+        // Mettre à jour l'affichage
+        document.getElementById("totalQuestions").innerHTML = vocabulaire.length;
+        
+        // Charger la première question
+        chargerQuestion();
+        
+    } catch (error) {
+        console.error("Erreur:", error);
+        document.getElementById("question").innerHTML = 
+            `<div class="error">
+                ❌ Erreur de chargement : ${error.message}<br><br>
+                Assurez-vous que le fichier "vocabulaire.txt" existe dans le même dossier que cette page HTML.
+             </div>`;
+        document.getElementById("reponse").disabled = true;
+        document.querySelectorAll("button").forEach(btn => btn.disabled = true);
+    }
+}
+
+// ======================
+// FONCTIONS PRINCIPALES
+// ======================
+
+function mettreAJourScore() {
+    let nouveauScore = 0;
+    for(let i = 0; i < questionsReussies.length; i++) {
+        if(questionsReussies[i]) nouveauScore++;
+    }
+    score = nouveauScore;
+    document.getElementById("score").innerHTML = score;
+}
+
+function effacerReponseAffichee() {
+    const reponseAffichee = document.getElementById("reponse-affichee");
+    reponseAffichee.style.display = "none";
+    reponseAffichee.innerHTML = "";
+}
+
+function chargerQuestion(){
+    if(vocabulaire.length === 0) return;
+    
+    questionActuelle = vocabulaire[indexQuestion][0];
+    bonneReponse1 = vocabulaire[indexQuestion][1];
+    bonneReponse2 = vocabulaire[indexQuestion][2];
+
+    document.getElementById("question").innerHTML =
+        "📝 Traduction de : <b>"
+        + questionActuelle +
+        "</b><br><span style='font-size:16px; color:#666;'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</span>";
+
+    document.getElementById("reponse").value = "";
+    effacerReponseAffichee();
+    document.getElementById("resultat").innerHTML = "";
+    document.getElementById("resultat").style.backgroundColor = "";
+    document.getElementById("resultat").style.padding = "";
+    document.getElementById("reponse").focus();
+}
+
+function questionSuivante() {
+    if(indexQuestion < vocabulaire.length - 1) {
+        indexQuestion++;
+        chargerQuestion();
+    } else {
+        document.getElementById("resultat").innerHTML = "📌 Vous êtes à la dernière question !";
+        document.getElementById("resultat").style.backgroundColor = "#fff3cd";
+        document.getElementById("resultat").style.padding = "10px";
+        document.getElementById("resultat").style.borderRadius = "8px";
+        setTimeout(() => {
+            if(document.getElementById("resultat").innerHTML === "📌 Vous êtes à la dernière question !") {
+                document.getElementById("resultat").innerHTML = "";
+                document.getElementById("resultat").style.backgroundColor = "";
+                document.getElementById("resultat").style.padding = "";
+            }
+        }, 1500);
+    }
+}
+
+function questionPrecedente() {
+    if(indexQuestion > 0) {
+        indexQuestion--;
+        chargerQuestion();
+    } else {
+        document.getElementById("resultat").innerHTML = "📌 Vous êtes à la première question !";
+        document.getElementById("resultat").style.backgroundColor = "#fff3cd";
+        document.getElementById("resultat").style.padding = "10px";
+        document.getElementById("resultat").style.borderRadius = "8px";
+        setTimeout(() => {
+            if(document.getElementById("resultat").innerHTML === "📌 Vous êtes à la première question !") {
+                document.getElementById("resultat").innerHTML = "";
+                document.getElementById("resultat").style.backgroundColor = "";
+                document.getElementById("resultat").style.padding = "";
+            }
+        }, 1500);
+    }
+}
+
+function afficherReponse() {
+    let reponseAffichee = document.getElementById("reponse-affichee");
+    
+    if(bonneReponse2 !== "") {
+        reponseAffichee.innerHTML = "📖 La réponse est : <b>" + bonneReponse1 + "</b> ou <b>" + bonneReponse2 + "</b>";
+    } else {
+        reponseAffichee.innerHTML = "📖 La réponse est : <b>" + bonneReponse1 + "</b>";
+    }
+    
+    reponseAffichee.style.display = "block";
+}
+
+function verifier(){
+    let utilisateur = document.getElementById("reponse").value.trim().toLowerCase();
+    let rep1 = bonneReponse1.toLowerCase();
+    let rep2 = bonneReponse2.toLowerCase();
+
+    if(questionsReussies[indexQuestion]) {
+        document.getElementById("resultat").innerHTML = "⚠️ Cette question a déjà été réussie !";
+        document.getElementById("resultat").style.backgroundColor = "#fff3cd";
+        document.getElementById("resultat").style.padding = "10px";
+        document.getElementById("resultat").style.borderRadius = "8px";
+        return;
+    }
+
+    if(utilisateur === rep1 || (rep2 !== "" && utilisateur === rep2)){
+        if(bonneReponse2 !== ""){
+            document.getElementById("resultat").innerHTML = "✅ Oui, c'est bien : " + bonneReponse1 + " ou " + bonneReponse2;
+        }else{
+            document.getElementById("resultat").innerHTML = "✅ Oui, c'est bien : " + bonneReponse1;
+        }
+
+        document.getElementById("resultat").style.backgroundColor = "#d4edda";
+        document.getElementById("resultat").style.padding = "10px";
+        document.getElementById("resultat").style.borderRadius = "8px";
+
+        questionsReussies[indexQuestion] = true;
+        mettreAJourScore();
+
+    }else{
+        if(bonneReponse2 !== ""){
+            document.getElementById("resultat").innerHTML = "❌ Faux. Réponse : " + bonneReponse1 + " ou " + bonneReponse2;
+        }else{
+            document.getElementById("resultat").innerHTML = "❌ Faux. Réponse : " + bonneReponse1;
+        }
+
+        document.getElementById("resultat").style.backgroundColor = "#f8d7da";
+        document.getElementById("resultat").style.padding = "10px";
+        document.getElementById("resultat").style.borderRadius = "8px";
+    }
+}
+
+// ======================
+// EVENEMENTS
+// ======================
+
+document.getElementById("reponse").addEventListener("keydown", function(event){
+    if(event.key === "Enter"){
+        verifier();
+    }
+});
+
+document.addEventListener("keydown", function(event) {
+    if(event.key === "ArrowLeft") {
+        event.preventDefault();
+        questionPrecedente();
+    } else if(event.key === "ArrowRight") {
+        event.preventDefault();
+        questionSuivante();
+    }
+});
+
+// ======================
+// DEMARRAGE
+// ======================
+
+// Afficher un message de chargement
+document.getElementById("question").innerHTML = '<div id="loading">📚 Chargement du vocabulaire...</div>';
+document.getElementById("totalQuestions").innerHTML = "?";
+
+// Lancer le chargement du fichier externe
+chargerVocabulaire();
+
+</script>
+
+</body>
+</html>
