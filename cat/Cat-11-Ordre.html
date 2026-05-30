@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Quiz vocabulaire - Mode consultation</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial;
+    background:#f0f0f0;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+}
+
+#box{
+    background:white;
+    padding:20px;
+    border-radius:0;
+    max-width:100%;
+    width:100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Sur les grands écrans (ordinateurs), on peut limiter un peu */
+@media (min-width: 768px) {
+    #box {
+        max-width: 800px;
+        margin: 0 auto;
+        border-radius: 10px;
+        min-height: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    body {
+        padding: 0 20px;
+    }
+}
+
+.nav-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.nav-group button {
+    flex: 1;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.nav-group button:hover {
+    background-color: #45a049;
+}
+
+.nav-group button:active {
+    background-color: #3d8b40;
+}
+
+#question{
+    font-size:24px;
+    margin-bottom:15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.btn-reponse {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    background-color: #ff9800;
+    color: white;
+    margin-top: 15px;
+}
+
+.btn-reponse:hover {
+    background-color: #e68900;
+}
+
+#reponse-affichee {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #e3f2fd;
+    border-left: 6px solid #2196f3;
+    border-radius: 8px;
+    display: none;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="box">
+
+<h2>📚 Quiz de vocabulaire - Mode consultation</h2>
+
+<div id="question"></div>
+
+<div class="nav-group">
+    <button onclick="questionPrecedente()">◀ Précédente</button>
+    <button onclick="questionSuivante()">Suivante ▶</button>
+</div>
+
+<button class="btn-reponse" onclick="afficherReponse()">👁 Afficher la réponse</button>
+
+<div id="reponse-affichee"></div>
+
+</div>
+
+<script>
+
+// ======================
+// VOCABULAIRE --- A SAISIR ICI
+// Format :
+// question=reponse1=reponse2
+// reponse2 est optionnelle
+// ======================
+
+let texte = `
+
+Ba của Tiểu Minh có bốn người con trai = Siu2 Ming4 ge3 baa4 baa1 jau5 sei3 go3 zai2 
+Lần lượt tên là Tiểu Xuân, Tiểu Hạ, Tiểu Thu =fan1 bit6 giu3 siu2 ceon1, siu2 haa6, siu2 cau1 
+con trai thứ tư tên là gì? = dai6 sei3 go3 zai2 giu3 mat1 je5 meng2 
+có phải là Tiểu Đông ? = m4 hai6 siu2 dung1 
+là Tiểu Minh = hai6 siu2 ming4 
+
+
+
+`;
+
+// ======================
+// TABLEAU
+// ======================
+
+let vocabulaire = [];
+
+let lignes = texte.trim().split("\n");
+
+for(let ligne of lignes){
+    // Ignorer les lignes qui commencent par //
+    if(ligne.trim().startsWith("//")) continue;
+    
+    let morceaux = ligne.split("=");
+
+    let question = morceaux[0]?.trim() || "";
+
+    let reponse1 = morceaux[1]?.trim() || "";
+
+    let reponse2 = morceaux[2]?.trim() || "";
+
+    if(question && reponse1) { // Ne rajouter que si la ligne est valide
+        vocabulaire.push([
+            question,
+            reponse1,
+            reponse2
+        ]);
+    }
+}
+
+// ======================
+// VARIABLES
+// ======================
+
+let indexQuestion = 0;
+let questionActuelle = "";
+let bonneReponse1 = "";
+let bonneReponse2 = "";
+
+// ======================
+// EFFACER REPONSE AFFICHEE
+// ======================
+
+function effacerReponseAffichee() {
+    const reponseAffichee = document.getElementById("reponse-affichee");
+    reponseAffichee.style.display = "none";
+    reponseAffichee.innerHTML = "";
+}
+
+// ======================
+// CHARGER UNE QUESTION
+// ======================
+
+function chargerQuestion(){
+    questionActuelle = vocabulaire[indexQuestion][0];
+    bonneReponse1 = vocabulaire[indexQuestion][1];
+    bonneReponse2 = vocabulaire[indexQuestion][2];
+
+    document.getElementById("question").innerHTML =
+        "📝 Traduction de : <b>"
+        + questionActuelle +
+        "</b><br><span style='font-size:16px; color:#666;'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</span>";
+    
+    // Cacher la réponse quand on change de question
+    effacerReponseAffichee();
+}
+
+// ======================
+// AFFICHER LA REPONSE
+// ======================
+
+function afficherReponse() {
+    let reponseAffichee = document.getElementById("reponse-affichee");
+    
+    if(bonneReponse2 !== "") {
+        reponseAffichee.innerHTML = "📖 La réponse est : <b>" + bonneReponse1 + "</b> ou <b>" + bonneReponse2 + "</b>";
+    } else {
+        reponseAffichee.innerHTML = "📖 La réponse est : <b>" + bonneReponse1 + "</b>";
+    }
+    
+    reponseAffichee.style.display = "block";
+}
+
+// ======================
+// QUESTION SUIVANTE
+// ======================
+
+function questionSuivante() {
+    if(indexQuestion < vocabulaire.length - 1) {
+        indexQuestion++;
+        chargerQuestion();
+    } else {
+        const msg = document.createElement("div");
+        msg.textContent = "📌 Dernière question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.left = "50%";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.backgroundColor = "#333";
+        msg.style.color = "white";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.9";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// QUESTION PRECEDENTE
+// ======================
+
+function questionPrecedente() {
+    if(indexQuestion > 0) {
+        indexQuestion--;
+        chargerQuestion();
+    } else {
+        const msg = document.createElement("div");
+        msg.textContent = "📌 Première question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.left = "50%";
+        msg.style.backgroundColor = "#333";
+        msg.style.color = "white";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.9";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// TOUCHES FLECHEES
+// ======================
+
+document.addEventListener("keydown", function(event) {
+    if(event.key === "ArrowLeft") {
+        event.preventDefault();
+        questionPrecedente();
+    } else if(event.key === "ArrowRight") {
+        event.preventDefault();
+        questionSuivante();
+    }
+});
+
+// ======================
+// DEMARRAGE
+// ======================
+
+// Vérifier qu'on a des questions
+if(vocabulaire.length === 0) {
+    document.getElementById("question").innerHTML = "Erreur : Aucune question trouvée!";
+} else {
+    chargerQuestion();
+}
+
+</script>
+
+</body>
+</html>
