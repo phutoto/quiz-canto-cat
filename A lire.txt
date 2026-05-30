@@ -1,0 +1,21 @@
+Menu
+│
+├── Cat
+│   ├── Divers 1
+│   │   └── Fichiers internes ou externes(les vocabulaires se trouvent dans un fichier externe)
+│   └── Divers 2
+│
+├── Tender Heart
+│
+├── Winnie
+│
+├── Tictot
+│
+└── Facebook
+
+
+Fichiers internes (les vocabulaires se trouvent dans a saisir dans le fichier HTML, partie Saisir vocabulaires ICI)
+Fichiers externes(les vocabulaires se trouvent dans un fichier externe)
+
+Fichiers reponses a saisir pour gagner des points (partie cat 10, 28, 30)
+Fichiers sans points (juste question et reponses)
