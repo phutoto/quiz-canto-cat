@@ -6,7 +6,7 @@
 <meta name="google" content="notranslate">
 <meta name="robots" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Quiz vocabulaire</title>
+<title>Quiz Cat 30 - Mode sombre</title>
 
 <style>
 
@@ -16,38 +16,42 @@
     box-sizing: border-box;
 }
 
-body{
-    font-family: Arial;
-    background:#f0f0f0;
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background: #0a0c10;
     padding: 0;
     margin: 0;
     min-height: 100vh;
+    color: #eef2ff;
 }
 
-#box{
-    background:white;
-    padding:20px;
-    border-radius:0;
-    max-width:100%;
-    width:100%;
+#box {
+    background: #0e1117;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    max-width: 100%;
+    width: 100%;
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
+    border-left: 1px solid rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255,255,255,0.03);
 }
 
 /* Sur les grands écrans (ordinateurs), on peut limiter un peu */
 @media (min-width: 768px) {
     #box {
-        max-width: 800px;
-        margin: 0 auto;
-        border-radius: 10px;
+        max-width: 780px;
+        margin: 2rem auto;
+        border-radius: 2rem;
         min-height: auto;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        background: #11151c;
+        box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8);
+        border: 1px solid #1e2838;
     }
     
     body {
-        padding: 0 20px;
+        padding: 0 1rem;
     }
 }
 
@@ -56,161 +60,208 @@ body{
     position: absolute;
     top: 15px;
     left: 15px;
-    background-color: #9e9e9e;
-    color: white;
-    padding: 8px 12px;
+    background-color: #171c24;
+    color: #cbd5e6;
+    padding: 8px 14px;
     font-size: 14px;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid #2a3a4a;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     z-index: 100;
+    font-family: inherit;
 }
 
 .btn-retour:hover {
-    background-color: #7e7e7e;
+    background-color: #1e2a36;
+    border-color: #3b6e9e;
+    color: white;
 }
 
 .btn-retour:active {
-    background-color: #6e6e6e;
+    transform: scale(0.96);
 }
 
 /* Ajuster le titre pour qu'il ne chevauche pas le bouton */
 h2 {
     text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 1.5rem;
+    color: #eef2ff;
     padding: 0 60px;
+    font-weight: 500;
+    font-size: 1.6rem;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #ffffff, #7ab3c8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
-input{
-    width:100%;
-    padding:15px;
-    margin-top:10px;
-    font-size:18px;
-    box-sizing: border-box;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+input {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    background: #0c0f14;
+    border: 1.5px solid #1e2a3a;
+    border-radius: 1.2rem;
+    color: #f0f3ff;
+    transition: all 0.2s ease;
+    font-family: inherit;
 }
 
 input:focus {
-    border-color: #4CAF50;
+    border-color: #3b82f6;
     outline: none;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    background: #11161f;
 }
 
-button{
-    margin-top:10px;
-    padding:15px;
-    font-size:18px;
+input::placeholder {
+    color: #4a5568;
+}
+
+button {
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     border: none;
-    border-radius: 8px;
-    transition: background-color 0.2s;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    background: #171c24;
+    color: #ddd;
+    border: 1px solid #253241;
 }
 
 .button-group {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 12px;
+    margin-top: 1rem;
 }
 
 .button-group button {
     flex: 1;
-    margin-top: 0;
 }
 
 .button-group button:first-child {
-    background-color: #2196f3;
+    background: #2563eb;
     color: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
 }
 
 .button-group button:first-child:hover {
-    background-color: #0b7dda;
+    background: #1d4ed8;
+    transform: translateY(-1px);
 }
 
 .button-group button:last-child {
-    background-color: #ff9800;
-    color: white;
+    background: #171c24;
+    color: #cbd5e6;
+    border: 1px solid #2a3a4a;
 }
 
 .button-group button:last-child:hover {
-    background-color: #e68900;
+    background: #1e2a36;
+    color: white;
 }
 
 .nav-group {
     display: flex;
-    gap: 10px;
-    margin-top: 15px;
+    gap: 12px;
+    margin-top: 1.2rem;
 }
 
 .nav-group button {
     flex: 1;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+    background: #10141c;
+    border: 1px solid #1e2a3a;
 }
 
 .nav-group button:hover {
-    background-color: #45a049;
+    background: #1a222e;
+    border-color: #3b6e9e;
 }
 
-.nav-group button:active {
-    background-color: #3d8b40;
-}
-
-#question{
-    font-size:24px;
-    margin-bottom:15px;
+#question {
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin: 1.2rem 0 1rem;
     line-height: 1.4;
-    word-wrap: break-word;
+    background: #0c0f14;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-align: center;
 }
 
-#resultat{
-    margin-top:15px;
-    font-weight:bold;
-    font-size: 18px;
-    padding: 10px;
-    border-radius: 8px;
-    word-wrap: break-word;
+#question b {
+    font-weight: 600;
+    background: linear-gradient(120deg, #3b82f6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+#resultat {
+    margin-top: 1.2rem;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(2px);
 }
 
 #reponse-affichee {
-    margin-top: 10px;
-    padding: 20px;
-    background-color: #e3f2fd;
-    border-left: 6px solid #2196f3;
-    border-radius: 8px;
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+    background: #0c1017;
+    border-left: 5px solid #06b6d4;
+    border-radius: 1.2rem;
     display: none;
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 500;
     text-align: center;
-    word-wrap: break-word;
-    word-break: break-word;
+    color: #e2e8ff;
+    border: 1px solid #1e3650;
+    box-shadow: 0 6px 12px -8px black;
 }
 
 .score-container {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f5f5f5;
-    border-radius: 8px;
+    margin-top: 2rem;
+    padding: 0.8rem;
+    background: #0a0e14;
+    border-radius: 1.5rem;
     text-align: center;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 500;
+    border-top: 1px solid #1e2a3a;
+    color: #b9c3e6;
+}
+
+.score-container span {
+    font-weight: 700;
+    color: #3b82f6;
+    font-size: 1.3rem;
 }
 
 #loading {
     text-align: center;
     padding: 50px;
-    font-size: 18px;
-    color: #666;
+    font-size: 1.1rem;
+    color: #7ab3c8;
 }
 
 .error {
-    color: red;
+    color: #f87171;
     text-align: center;
     padding: 20px;
 }
@@ -224,7 +275,7 @@ button{
 
 <button class="btn-retour" onclick="retourAccueil()">🏠 Retour</button>
 
-<h2>📚 Quiz Cat 30 dans l'ordre</h2>
+<h2>🐱 QUIZ CAT 30 · DARK EDITION 🐱</h2>
 
 <div id="question"></div>
 
@@ -282,7 +333,7 @@ async function chargerVocabulaire() {
         const response = await fetch('vocaCat-30.txt');
         
         if (!response.ok) {
-            throw new Error(`Impossible de charger vocabulaire.txt (HTTP ${response.status})`);
+            throw new Error(`Impossible de charger vocaCat-30.txt (HTTP ${response.status})`);
         }
         
         const texte = await response.text();
@@ -327,7 +378,7 @@ async function chargerVocabulaire() {
         document.getElementById("question").innerHTML = 
             `<div class="error">
                 ❌ Erreur de chargement : ${error.message}<br><br>
-                Assurez-vous que le fichier "vocabulaire.txt" existe dans le même dossier que cette page HTML.
+                Assurez-vous que le fichier "vocaCat-30.txt" existe dans le même dossier que cette page HTML.
              </div>`;
         document.getElementById("reponse").disabled = true;
         document.querySelectorAll("button").forEach(btn => btn.disabled = true);
@@ -363,7 +414,7 @@ function chargerQuestion(){
     document.getElementById("question").innerHTML =
         "📝 Traduction de : <b>"
         + questionActuelle +
-        "</b><br><span style='font-size:16px; color:#666;'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</span>";
+        "</b><br><span style='font-size:0.85rem; opacity:0.6;'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</span>";
 
     document.getElementById("reponse").value = "";
     effacerReponseAffichee();
@@ -381,9 +432,9 @@ function questionSuivante() {
         chargerQuestion();
     } else {
         document.getElementById("resultat").innerHTML = "📌 Vous êtes à la dernière question !";
-        document.getElementById("resultat").style.backgroundColor = "#fff3cd";
+        document.getElementById("resultat").style.backgroundColor = "#1a2533";
         document.getElementById("resultat").style.padding = "10px";
-        document.getElementById("resultat").style.borderRadius = "8px";
+        document.getElementById("resultat").style.borderRadius = "1rem";
         setTimeout(() => {
             if(document.getElementById("resultat").innerHTML === "📌 Vous êtes à la dernière question !") {
                 document.getElementById("resultat").innerHTML = "";
@@ -400,9 +451,9 @@ function questionPrecedente() {
         chargerQuestion();
     } else {
         document.getElementById("resultat").innerHTML = "📌 Vous êtes à la première question !";
-        document.getElementById("resultat").style.backgroundColor = "#fff3cd";
+        document.getElementById("resultat").style.backgroundColor = "#1a2533";
         document.getElementById("resultat").style.padding = "10px";
-        document.getElementById("resultat").style.borderRadius = "8px";
+        document.getElementById("resultat").style.borderRadius = "1rem";
         setTimeout(() => {
             if(document.getElementById("resultat").innerHTML === "📌 Vous êtes à la première question !") {
                 document.getElementById("resultat").innerHTML = "";
@@ -432,9 +483,9 @@ function verifier(){
 
     if(questionsReussies[indexQuestion]) {
         document.getElementById("resultat").innerHTML = "⚠️ Cette question a déjà été réussie !";
-        document.getElementById("resultat").style.backgroundColor = "#fff3cd";
+        document.getElementById("resultat").style.backgroundColor = "#1a2533";
         document.getElementById("resultat").style.padding = "10px";
-        document.getElementById("resultat").style.borderRadius = "8px";
+        document.getElementById("resultat").style.borderRadius = "1rem";
         return;
     }
 
@@ -445,9 +496,9 @@ function verifier(){
             document.getElementById("resultat").innerHTML = "✅ Oui, c'est bien : " + bonneReponse1;
         }
 
-        document.getElementById("resultat").style.backgroundColor = "#d4edda";
+        document.getElementById("resultat").style.backgroundColor = "#0e2a1f";
         document.getElementById("resultat").style.padding = "10px";
-        document.getElementById("resultat").style.borderRadius = "8px";
+        document.getElementById("resultat").style.borderRadius = "1rem";
 
         questionsReussies[indexQuestion] = true;
         mettreAJourScore();
@@ -459,9 +510,9 @@ function verifier(){
             document.getElementById("resultat").innerHTML = "❌ Faux. Réponse : " + bonneReponse1;
         }
 
-        document.getElementById("resultat").style.backgroundColor = "#f8d7da";
+        document.getElementById("resultat").style.backgroundColor = "#2a1520";
         document.getElementById("resultat").style.padding = "10px";
-        document.getElementById("resultat").style.borderRadius = "8px";
+        document.getElementById("resultat").style.borderRadius = "1rem";
     }
 }
 
