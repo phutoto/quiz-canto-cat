@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Quiz vocabulaire</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background: #0a0c10;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    color: #eef2ff;
+}
+
+#box {
+    background: #0e1117;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border-left: 1px solid rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Sur les grands écrans (ordinateurs), on peut limiter un peu */
+@media (min-width: 768px) {
+    #box {
+        max-width: 780px;
+        margin: 2rem auto;
+        border-radius: 2rem;
+        min-height: auto;
+        background: #11151c;
+        box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8);
+        border: 1px solid #1e2838;
+    }
+    
+    body {
+        padding: 0 1rem;
+    }
+}
+
+.nav-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+.nav-group button {
+    flex: 1;
+    background: #10141c;
+    color: #cbd5e6;
+    border: 1px solid #1e2a3a;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.nav-group button:hover {
+    background: #1a222e;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.nav-group button:active {
+    transform: scale(0.98);
+}
+
+#question {
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin: 1.2rem 0 1rem;
+    line-height: 1.4;
+    background: #0c0f14;
+    padding: 1.8rem;
+    border-radius: 1.5rem;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+#question b {
+    font-weight: 600;
+    background: linear-gradient(120deg, #3b82f6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.btn-reponse {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #2a3a4a;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    background: #171c24;
+    color: #cbd5e6;
+    margin-top: 1.2rem;
+    font-family: inherit;
+}
+
+.btn-reponse:hover {
+    background: #1e2a36;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.btn-reponse:active {
+    transform: scale(0.98);
+}
+
+#reponse-affichee {
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+    background: #0c1017;
+    border-left: 5px solid #f59e0b;
+    border-radius: 1.2rem;
+    display: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fbbf24;
+    border: 1px solid #3e2a1e;
+    box-shadow: 0 6px 12px -8px black;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    font-size: 1.8rem;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.lucky-char {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 4px rgba(239,68,68,0.5));
+}
+
+.question-counter {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #f59e0b;
+}
+
+.emoji {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 2px rgba(245,158,11,0.5));
+}
+
+/* Style pour le message toast cyclique */
+.cycle-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1a2533;
+    color: #fbbf24;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    z-index: 1000;
+    opacity: 0.95;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="box">
+
+<h2>
+    <span class="lucky-char">福</span>
+    Quiz de vocabulaire
+    <span class="lucky-char">祿</span>
+</h2>
+
+<div id="question"></div>
+
+<div class="nav-group">
+    <button onclick="questionPrecedente()">◀ Précédente</button>
+    <button onclick="questionSuivante()">Suivante ▶</button>
+</div>
+
+<button class="btn-reponse" onclick="afficherReponse()">👁 Afficher la réponse</button>
+
+<div id="reponse-affichee"></div>
+
+</div>
+
+<script>
+
+// ======================
+// VOCABULAIRE --- A SAISIR ICI
+// Format :
+// question=reponse1=reponse2
+// reponse2 est optionnelle
+// ======================
+
+let texte = `
+
+theo ý tôi=gai3 ngo5 waa6 ne1
+thế giới này=ni1 go3 sai3 gaai3
+người ngoài hành tinh =ngoi6 sing1 jan4
+Nếu có thì=jau5 ge3 waa2
+từ lâu rồi= jat1 zou2
+xuất hiện= ceot1 jin6 
+Cái gì cũng có mà!. =me1 dou1 jau5 gaa3 laa1!
+Ngay cả con mèo cũng biết nói chuyện= lin4 maau1 dou1 sik1 gong2 je5
+có cái gì không có thể=jau5 me1 mou4 ho2 nang4 aa3
+Người ngoài hành tinh có thể là người mà bạn quen biết=ngoi6 sing1 jan4 ho2 nang4 hai6 nei5 suk6 sik1 ge3 jan4<br>suk6 sik1 :quen biết
+đang nói cùng một ngôn ngữ,=syut3 zoek3 soeng1 tung4 dik1 jyu5 jin4, 
+vờ như không có chuyện gì 	=joek6 mou4 kei4 si6, <br>vờ như=joek6
+luôn ẩn nấp ở bên cạnh bạn.	=jat1 zik6 cim4 fuk6 zoi6 nei5 san1 bin1.<br>luôn:jat1 zik6<br>ẩn nấp:cim4 fuk6<br>bên cạnh:san1 bin1
+Nhìn người ta làm gì chứ? =mong6 zyu6 jan4 zou6 me1 ze1?<br>Nhìn:mong6 zyu6
+
+`;
+
+// ======================
+// TABLEAU
+// ======================
+
+let vocabulaire = [];
+
+let lignes = texte.trim().split("\n");
+
+for(let ligne of lignes){
+    // Ignorer les lignes qui commencent par //
+    if(ligne.trim().startsWith("//")) continue;
+    
+    let morceaux = ligne.split("=");
+
+    let question = morceaux[0]?.trim() || "";
+    let reponse1 = morceaux[1]?.trim() || "";
+    let reponse2 = morceaux[2]?.trim() || "";
+
+    if(question && reponse1) {
+        vocabulaire.push([
+            question,
+            reponse1,
+            reponse2
+        ]);
+    }
+}
+
+// ======================
+// VARIABLES
+// ======================
+
+let indexQuestion = 0;
+let questionActuelle = "";
+let bonneReponse1 = "";
+let bonneReponse2 = "";
+
+// ======================
+// FONCTION AFFICHER MESSAGE TEMPORAIRE
+// ======================
+
+function showMessage(message, isCyclic = true) {
+    const msg = document.createElement("div");
+    msg.className = "cycle-toast";
+    if (isCyclic) {
+        msg.innerHTML = "🔄 " + message + " 🔄";
+    } else {
+        msg.innerHTML = message;
+    }
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 1500);
+}
+
+// ======================
+// EFFACER REPONSE AFFICHEE
+// ======================
+
+function effacerReponseAffichee() {
+    const reponseAffichee = document.getElementById("reponse-affichee");
+    reponseAffichee.style.display = "none";
+    reponseAffichee.innerHTML = "";
+}
+
+// ======================
+// CHARGER UNE QUESTION
+// ======================
+
+function chargerQuestion(){
+    if(vocabulaire.length === 0) return;
+    
+    questionActuelle = vocabulaire[indexQuestion][0];
+    bonneReponse1 = vocabulaire[indexQuestion][1];
+    bonneReponse2 = vocabulaire[indexQuestion][2];
+
+    document.getElementById("question").innerHTML =
+        "<span class='emoji'>📝</span> Traduction de : <br><b>"
+        + questionActuelle +
+        "</b><div class='question-counter'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</div>";
+    
+    // Cacher la réponse quand on change de question
+    effacerReponseAffichee();
+}
+
+// ======================
+// AFFICHER LA REPONSE
+// ======================
+
+function afficherReponse() {
+    let reponseAffichee = document.getElementById("reponse-affichee");
+    
+    if(bonneReponse2 !== "") {
+        reponseAffichee.innerHTML = "Réponse : <b>" + bonneReponse1 + "</b> ou <b>" + bonneReponse2 + "</b>";
+    } else {
+        reponseAffichee.innerHTML = "Réponse : <b>" + bonneReponse1 + "</b>";
+    }
+    
+    reponseAffichee.style.display = "block";
+}
+
+// ======================
+// QUESTION SUIVANTE (CYCLIQUE)
+// ======================
+
+function questionSuivante() {
+    let oldIndex = indexQuestion;
+    
+    if(indexQuestion < vocabulaire.length - 1) {
+        indexQuestion++;
+    } else {
+        // Si on est à la dernière, on revient à la première
+        indexQuestion = 0;
+        showMessage("Retour à la première question", true);
+    }
+    
+    if (oldIndex !== indexQuestion) {
+        chargerQuestion();
+    }
+}
+
+// ======================
+// QUESTION PRECEDENTE (CYCLIQUE)
+// ======================
+
+function questionPrecedente() {
+    let oldIndex = indexQuestion;
+    
+    if(indexQuestion > 0) {
+        indexQuestion--;
+    } else {
+        // Si on est à la première, on va à la dernière
+        indexQuestion = vocabulaire.length - 1;
+        showMessage("Dernière question", true);
+    }
+    
+    if (oldIndex !== indexQuestion) {
+        chargerQuestion();
+    }
+}
+
+// ======================
+// TOUCHES FLECHEES (CYCLIQUES)
+// ======================
+
+document.addEventListener("keydown", function(event) {
+    if(event.key === "ArrowLeft") {
+        event.preventDefault();
+        questionPrecedente();
+    } else if(event.key === "ArrowRight") {
+        event.preventDefault();
+        questionSuivante();
+    }
+});
+
+// ======================
+// DEMARRAGE
+// ======================
+
+// Vérifier qu'on a des questions
+if(vocabulaire.length === 0) {
+    document.getElementById("question").innerHTML = "❌ Erreur : Aucune question trouvée!";
+} else {
+    chargerQuestion();
+}
+
+</script>
+
+</body>
+</html>

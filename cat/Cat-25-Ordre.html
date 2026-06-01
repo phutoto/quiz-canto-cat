@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Quiz vocabulaire</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background: #0a0c10;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    color: #eef2ff;
+}
+
+#box {
+    background: #0e1117;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border-left: 1px solid rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Sur les grands écrans (ordinateurs), on peut limiter un peu */
+@media (min-width: 768px) {
+    #box {
+        max-width: 780px;
+        margin: 2rem auto;
+        border-radius: 2rem;
+        min-height: auto;
+        background: #11151c;
+        box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8);
+        border: 1px solid #1e2838;
+    }
+    
+    body {
+        padding: 0 1rem;
+    }
+}
+
+.nav-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+.nav-group button {
+    flex: 1;
+    background: #10141c;
+    color: #cbd5e6;
+    border: 1px solid #1e2a3a;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.nav-group button:hover {
+    background: #1a222e;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.nav-group button:active {
+    transform: scale(0.98);
+}
+
+#question {
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin: 1.2rem 0 1rem;
+    line-height: 1.4;
+    background: #0c0f14;
+    padding: 1.8rem;
+    border-radius: 1.5rem;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+#question b {
+    font-weight: 600;
+    background: linear-gradient(120deg, #3b82f6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.btn-reponse {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #2a3a4a;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    background: #171c24;
+    color: #cbd5e6;
+    margin-top: 1.2rem;
+    font-family: inherit;
+}
+
+.btn-reponse:hover {
+    background: #1e2a36;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.btn-reponse:active {
+    transform: scale(0.98);
+}
+
+#reponse-affichee {
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+    background: #0c1017;
+    border-left: 5px solid #f59e0b;
+    border-radius: 1.2rem;
+    display: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fbbf24;
+    border: 1px solid #3e2a1e;
+    box-shadow: 0 6px 12px -8px black;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    font-size: 1.8rem;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.lucky-char {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 4px rgba(239,68,68,0.5));
+}
+
+.question-counter {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #f59e0b;
+}
+
+.emoji {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 2px rgba(245,158,11,0.5));
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="box">
+
+<h2>
+    <span class="lucky-char">福</span>
+    Quiz de vocabulaire
+    <span class="lucky-char">祿</span>
+</h2>
+
+<div id="question"></div>
+
+<div class="nav-group">
+    <button onclick="questionPrecedente()">◀ Précédente</button>
+    <button onclick="questionSuivante()">Suivante ▶</button>
+</div>
+
+<button class="btn-reponse" onclick="afficherReponse()">👁 Afficher la réponse</button>
+
+<div id="reponse-affichee"></div>
+
+</div>
+
+<script>
+
+// ======================
+// VOCABULAIRE --- A SAISIR ICI
+// Format :
+// question=reponse1=reponse2
+// reponse2 est optionnelle
+// ======================
+
+let texte = `
+
+Hồi nãy mấy món đó ăn ngon ghê á.=tau4 sin1 di1 je5 hou2 hou2 sik6 aa3.
+Đúng vậy đó, lại còn rất rẻ nữa chứ!=hai6 aa3, zung6 hou2 peng4 tim1!
+Tôi tự đi dạo trước , lát nữa gặp lại!=ngo5 zi6 gei2 heoi3 haang4 haa5 sin1, jat1 zan6 gin3 laa1!
+Được thôi, lát nữa gặp lại nha!=hou2 aa3, jat1 zan6 gin3 laa1!
+Thực sự là rất nhộn nhịp, náo nhiệt quá chừng.=zan1 hai6 hou2 jit6 naau6 aa3.
+Khu trung tâm quả nhiên là khác biệt nha.=si5 keoi1 gwo2 jin4 hai6 bat1 tung4 di1 wo3.
+Trai đẹp ơi, có phải đi một mình không?=go1 zai2, aa3 me1 go3 jan4 aa3?
+Một mình đi dạo phố buồn chán lắm á, =jat1 go3 jan4 haang4 gaai1 hou2 mun6 gaa3, 
+hay là tìm ai đó bầu bạn đi.=bat1 jyu4 wan2 go3 jan4 pui4 haa5 laa1.
+Quán của tụi tôi nổi tiếng là có nhiều gái đẹp lắm, =ngo5 dei6 ge3 dim3 ceot1 saai3 meng2 do1 leng3 neoi2 gaa3,
+tôi tìm đứa đẹp nhất cho anh, =ngo5 wan2 go3 zeoi3 leng3 ge3 bei2 nei5, 
+bao anh hài lòng luôn.=baau1 nei5 mun5 ji3 aa3.
+Gái đẹp hả? Nhưng mà tôi không có nhiều tiền đâu nha.=leng3 neoi2 aa3? daan6 ngo5 mou5 me1 cin2 gaa3.
+Nói bậy bạ gì đâu không hà! Chỗ tụi tôi uống rượu rẻ lắm, =gong2 ni1 di1! ngo5 dei6 jam2 zau2 hou2 peng4 gaa3, 
+không hợp ý thì cứ ngồi một lát rồi đi, không sao hết á.=m4 ngaam1 sam1 seoi2 mai6 co5 jat1 zan6 lo1, mou5 so2 wai4 gaa3.
+Quán của tụi tôi ở phía trước không có xa đâu, =ngo5 dei6 go3 dim3 zau6 hai2 cin4 min6 mou5 gei2 jyun5 gaa3,
+quẹo một cái cua là tới liền hà.=zyun2 go3 waan1 zau6 hai6 gaa3 laa3.
+tôi dẫn anh đi nha!=ngo5 daai3 nei5 heoi3 laa1!
+Có gái đẹp thiệt hả? =jau5 leng3 neoi2? 
+Người đó có nói rất rẻ=keoi5 jau6 waa6 hou2 peng4
+Nghe muốn đi ghê luôn á!=hou2 soeng2 heoi3 tim1!
+Thôi mà, coi như nhìn biết (mở mang tầm mắt) đi.=syun3 laa1, dong1 gin3 sik1 haa5.
+Không hợp gu (không đúng ý) , thì đi về thôi=m4 ngaam1 sam1 seoi2 mai6 zau2 lo1, 
+không vấn đề gì !=mou5 man6 tai4 gaa3!
+rất sang trọng vậy=hou2 m4 hou4 waa4 aa3
+bienvenue patron=fun1 jing4 gwong1 lam4 aa3 lou5 baan2
+Xin chào, tôi tên là Bubo. Bạn có thể gọi tôi là A Bu=nei5 hou2 aa3, ngo5 giu3 Bubo aa3. nei5 ho2 ji5 giu3 ngo5, aa3 Bu
+Chào bạn, Bubo. Tôi là Dodo.=nei5 hou2 aa3, Bubo. ngo5 hai6 Dodo. hou2 gou1 hing3 jing6 sik1 nei5 aa3.
+Thật tệ , anh nhất định (phải) thường xuyên đi chơi/quậy tới bến nha.=m4 hou2 seoi1 gaa3, nei5 jat1 ding6 (jiu3) seng4 (jat6) heoi3 waan2 laa3.
+Xin lỗi nha, Bubo... (Đang định từ chối hoặc phân trần)=m4 hou2 ji3 si3 aa3, Bubo.
+Quản lý có việc tìm tôi , anh ngồi một lát nha.=ging1 lei5 jau5 si6 wan2 ngo5, nei5 co5 zan6 sin1.
+Rất nhanh sẽ có một cô gái đẹp đến tiếp bạn =hou2 faai3 wui5 jau5 go3 leng3 neoi2 lai4 pui4 nei5 laa3.
+Xin chào ông chủ (đại ca), anh đợi có lâu không ạ?=nei5 hou2 aa3, lou5 baan2, dang2 zo2 hou2 noi6 laa3?
+Cái (đứa) Dodo của tôi sao rồi?=ngo5 go3 do1 do1 ne1?
+Em còn chưa đủ "nhiều" (多多) nữa sao? (Chơi chữ)=ngo5 zung6 m4 gau3 " do1" me1?
+Đủ rồi, nhiều lắm rồi!=gau3 aa3, hou2 do1 laa3!
+Có đồ ăn rồi, từ từ nói chuyện nha đại ca!=jau5 di1 je5 sik6, maan6 maan6 king1 laa1!
+Cám ơn ạ, món Sashimi đặc sắc của anh đây.=m4 goi1, nei5 go3 dak6 sik1 ci3 san1.
+bắt đầu thôi nào, thực sự là rất ngon đó nha!=hoi1 caan1 laa1, zan1 hai6 hou2 hou2 mei6 aa3!
+Tôi không có hứng (ăn), tôi không (ăn) đâu!=ngo5 mou5 wai6 hau2 ge3, ngo5 m4 jiu3 laa3!
+Ôi, tôi có hẹn một ngượi rồi, đi trước đây =o1, ngo5 joek3 zo2 jan4, zau2 sin1 laa1!
+Oa! Không phải chứ hả? Tám ngàn tám (8800) luôn á hả?!=waa1! m4 hai6 gwaa3? baat3 cin1 baat3?!
+Thế là khá rẻ rồi đó ông chủ/đại ca.=gai3 peng4 zo2 laa3 lou5 baan2.
+trong quán của chúng tôi=ngo5 dei6 dim3 jap6 bin1 
+Hai cô nương nổi tiếng (hot) nhất=zeoi3 hung4 go2 loeng5 wai6 siu2 ze2 
+Anh đều ngồi cùng được, đúng là có bản lĩnh thật đó!=nei5 dou1 co5 dou3, zan1 hai6 bun2 si6 aa3.
+Tôi làm gì có nhiều tiền như vậy chứ?=ngo5 bin1 jau5 gam2 do1 cin2 aa3?
+Các người... các người có phải là quán lừa đảo, không vậy hả?=nei5 dei6,=hai6 m4 hai6 hak1 dim3 lai4 gaa3?
+Hừ! Ông chủ, có phải là đang có ý kiến gì không?=hei! lou5 baan2, hai6 m4 hai6 jau5 ji3 gin3 aa3?
+Tám ngàn tám...=baat3 cin1 baat3...
+Nhưng mà (mấy cô em) "Dodo" đó đúng là rất đẹp thiệt, haizzz.=bat1 gwo3 "do1 do1" zan1 hai6 hou2 leng3 aa3, aai1.
+Xem như là phải cọng thêm tiền học phí (học khôn) vậy.=dou1 hai6 jiu3 gaa1 haa5 hok6 fai3 gaa3.
+xài hết sạch tiền ,=hou3 saai3 di1 cin2, 
+
+
+`;
+
+// ======================
+// TABLEAU
+// ======================
+
+let vocabulaire = [];
+
+let lignes = texte.trim().split("\n");
+
+for(let ligne of lignes){
+    // Ignorer les lignes qui commencent par //
+    if(ligne.trim().startsWith("//")) continue;
+    
+    let morceaux = ligne.split("=");
+
+    let question = morceaux[0]?.trim() || "";
+    let reponse1 = morceaux[1]?.trim() || "";
+    let reponse2 = morceaux[2]?.trim() || "";
+
+    if(question && reponse1) {
+        vocabulaire.push([
+            question,
+            reponse1,
+            reponse2
+        ]);
+    }
+}
+
+// ======================
+// VARIABLES
+// ======================
+
+let indexQuestion = 0;
+let questionActuelle = "";
+let bonneReponse1 = "";
+let bonneReponse2 = "";
+
+// ======================
+// EFFACER REPONSE AFFICHEE
+// ======================
+
+function effacerReponseAffichee() {
+    const reponseAffichee = document.getElementById("reponse-affichee");
+    reponseAffichee.style.display = "none";
+    reponseAffichee.innerHTML = "";
+}
+
+// ======================
+// CHARGER UNE QUESTION
+// ======================
+
+function chargerQuestion(){
+    if(vocabulaire.length === 0) return;
+    
+    questionActuelle = vocabulaire[indexQuestion][0];
+    bonneReponse1 = vocabulaire[indexQuestion][1];
+    bonneReponse2 = vocabulaire[indexQuestion][2];
+
+    document.getElementById("question").innerHTML =
+        "<span class='emoji'>📝</span> Traduction de : <b>"
+        + questionActuelle +
+        "</b><div class='question-counter'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</div>";
+    
+    // Cacher la réponse quand on change de question
+    effacerReponseAffichee();
+}
+
+// ======================
+// AFFICHER LA REPONSE
+// ======================
+
+function afficherReponse() {
+    let reponseAffichee = document.getElementById("reponse-affichee");
+    
+    if(bonneReponse2 !== "") {
+        reponseAffichee.innerHTML = "Réponse : <b>" + bonneReponse1 + "</b> ou <b>" + bonneReponse2 + "</b>";
+    } else {
+        reponseAffichee.innerHTML = "Réponse : <b>" + bonneReponse1 + "</b>";
+    }
+    
+    reponseAffichee.style.display = "block";
+}
+
+// ======================
+// QUESTION SUIVANTE
+// ======================
+
+function questionSuivante() {
+    if(indexQuestion < vocabulaire.length - 1) {
+        indexQuestion++;
+        chargerQuestion();
+    } else {
+        const msg = document.createElement("div");
+        msg.innerHTML = "🏁 Dernière question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.left = "50%";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.backgroundColor = "#1a2533";
+        msg.style.color = "#fbbf24";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.95";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// QUESTION PRECEDENTE
+// ======================
+
+function questionPrecedente() {
+    if(indexQuestion > 0) {
+        indexQuestion--;
+        chargerQuestion();
+    } else {
+        const msg = document.createElement("div");
+        msg.innerHTML = "🏁 Première question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.left = "50%";
+        msg.style.backgroundColor = "#1a2533";
+        msg.style.color = "#fbbf24";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.95";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// TOUCHES FLECHEES
+// ======================
+
+document.addEventListener("keydown", function(event) {
+    if(event.key === "ArrowLeft") {
+        event.preventDefault();
+        questionPrecedente();
+    } else if(event.key === "ArrowRight") {
+        event.preventDefault();
+        questionSuivante();
+    }
+});
+
+// ======================
+// DEMARRAGE
+// ======================
+
+// Vérifier qu'on a des questions
+if(vocabulaire.length === 0) {
+    document.getElementById("question").innerHTML = "❌ Erreur : Aucune question trouvée!";
+} else {
+    chargerQuestion();
+}
+
+</script>
+
+</body>
+</html>
