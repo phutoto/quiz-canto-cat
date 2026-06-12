@@ -1,3 +1,0 @@
-- je voudrais si on est a la premiere question, le bouton precedent arrive a la derniere question,. Si on est a la derniere question, le bouton suivant, arrive a la premiere question
-- apres Traduction de :  , descendre a la ligne
-- apres Réponse :   , descendre a la ligne
