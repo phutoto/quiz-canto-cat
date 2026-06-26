@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Quiz vocabulaire</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background: #0a0c10;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    color: #eef2ff;
+}
+
+#box {
+    background: #0e1117;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border-left: 1px solid rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Sur les grands écrans (ordinateurs), on peut limiter un peu */
+@media (min-width: 768px) {
+    #box {
+        max-width: 780px;
+        margin: 2rem auto;
+        border-radius: 2rem;
+        min-height: auto;
+        background: #11151c;
+        box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8);
+        border: 1px solid #1e2838;
+    }
+    
+    body {
+        padding: 0 1rem;
+    }
+}
+
+.nav-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+.nav-group button {
+    flex: 1;
+    background: #10141c;
+    color: #cbd5e6;
+    border: 1px solid #1e2a3a;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.nav-group button:hover {
+    background: #1a222e;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.nav-group button:active {
+    transform: scale(0.98);
+}
+
+#question {
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin: 1.2rem 0 1rem;
+    line-height: 1.4;
+    background: #0c0f14;
+    padding: 1.8rem;
+    border-radius: 1.5rem;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+#question b {
+    font-weight: 600;
+    background: linear-gradient(120deg, #3b82f6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.btn-reponse {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #2a3a4a;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    background: #171c24;
+    color: #cbd5e6;
+    margin-top: 1.2rem;
+    font-family: inherit;
+}
+
+.btn-reponse:hover {
+    background: #1e2a36;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.btn-reponse:active {
+    transform: scale(0.98);
+}
+
+#reponse-affichee {
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+    background: #0c1017;
+    border-left: 5px solid #f59e0b;
+    border-radius: 1.2rem;
+    display: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fbbf24;
+    border: 1px solid #3e2a1e;
+    box-shadow: 0 6px 12px -8px black;
+}
+
+#reponse-affichee b {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    font-size: 1.8rem;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.lucky-char {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 4px rgba(239,68,68,0.5));
+}
+
+.question-counter {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 1rem;
+    color: #f59e0b;
+}
+
+.emoji {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 2px rgba(245,158,11,0.5));
+}
+
+.question-label {
+    display: block;
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.reponse-label {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="box">
+
+<h2>
+    <span class="lucky-char">福💧<->🏔<->💧<->🏔<->💧祿</span>
+</h2>
+
+<div id="question"></div>
+
+<div class="nav-group">
+    <button onclick="questionPrecedente()">◀ Précédente</button>
+    <button onclick="questionSuivante()">Suivante ▶</button>
+</div>
+
+<button class="btn-reponse" onclick="afficherReponse()">👁 Afficher la réponse</button>
+
+<div id="reponse-affichee"></div>
+
+</div>
+
+<script>
+
+// ======================
+// VOCABULAIRE --- A SAISIR ICI
+// Format :
+// question=reponse1=reponse2
+// reponse2 est optionnelle
+// ======================
+
+let texte = `
+
+
+tài xế, làm ơn , đi qua cảng Bắc Giác<br>
+Driver, please, cross to the harbour  North Point=si1 gei1, m4 goi1, gwo3 hoi2 bak1 gok3<br>司機 (si1 gei1) : driver<br>唔該 (m4 goi1) : please / excuse me / thanks (used when asking for a favor)<br>過 (gwo3) : cross / go over<br>海 (hoi2) : sea / harbour / cảng<br>北角 (bak1 gok3) : North Point (place in Hong Kong
+Girls get on vehicle first=neoi5 zai2 soeng5 ce1 sin1 wo3<br>女仔 (neoi5 zai2) : girl / young woman<br>上車 (soeng5 ce1) : get on the vehicle<br>先 (sin1) : first<br>喎 (wo3) : sentence particle (adds emphasis / reminds someone / “you know” tone)
+what ? Đàn ông nhường đàn bà= haa5 me1 aa3? naam4 jan4 joeng6 haa5 neoi5 zai2 laa1<br>joeng6 haa5:nhường<br>喎 (wo3) → reminding / “you know”<br>啦 (laa1) → suggestion / softening<br>喇 (laa3) → new situation / now / change
+“What? you say what ? where have girls?”=me1 aa3? nei5 gong2 me1 aa3, bin1 jau5 neoi5 zai2 aa3?
+Anh trai tài xế, thì ra anh thấy được tôi =si1 gei1 daai6 lou2, jyun4 loi4 nei5 gin3 dou2 ngo5 
+“I’m begging you, help me.”=kau4 haa5 nei5 bong1 haa5 ngo5 laa1<br>求 (kau4) : beg / plead<br>幫 (bong1 haa5) : help
+Em muốn tôi cách nào giúp em ? =nei5 soeng2 (ngo5) dim2 bong1 nei5 aa3?<br>
+you want help me, so then , please, fast drive, and drive fast=nei5 soeng2 bong1 ngo5, ge3 gam3 m4 goi1 faai3 di1 hoi1 ce1 tung4 hoi1 faai3 di1<br>快啲 (faai3 di1) : a bit faster<br>開車 (hoi1 ce1) : drive<br>開快啲 (hoi1 faai3 di1) : drive faster
+(Nếu mà ), Tối nay lại không cứu được người. =gam1 maan5 zoi3 gaau1 m4 dou2 jan4 ge3 waa6<br>今晚 (gam1 maan5) : tonight<br>再 (zoi3) : again<br>交 (gaau1) : cứu <br>唔到 (m4 dou2) : cannot / fail to<br>嘅話 (ge3 waa6) : if / in the case that<br>(交 (gaau1) : cứu
+Tôi nhảy lầu cũng không xong.  gia đình tang nát =ngo5 tiu3 lau4 , dou1 m4 dim6 aa3, gaa1 bin3 gaa3<br>跳樓 (tiu3 lau4) : jump off a building<br>都 (dou1) : even<br>唔掂 (m4 dim6) : not okay<br>家變 (gaa1 bin3) : family crisis
+Có một con yêu quái hung dữ đang đuổi theo tôi, lại còn đánh tôi nữa."<br>
+“There’s an evil spirit he chasing me and (even) hitting me.”=
+<br>jau5 zek3 ok3 jiu1 keoi5 zeoi1 zyu6 ngo5, zung6 daa2 ngo5<br>隻 (zek3) : classifier (for animals / creatures)<br>惡妖 (ok3 jiu1) : evil spirit / monster<br>追住 (zeoi1 zyu6) : chasing (continuously)<br>仲 (zung6) : even/still/moreover<br>打(daa2) : hit
+Còn muốn làm gì với tôi=<br>zung6 soeng2 deoi3 ngo5…
+<br>仲 (zung6) : still / even<br>想 (soeng2) : want to<br>對 (deoi3) : toward / do to / treat
+Tôi thậm chí làm ma cũng không muốn làm.=ngo5 lin4 zou6 gwai2 dou1 m4 soeng2 zou6 laa3
+supplie you , aider moi=kau4 haa5 nei5 , bong1 haa5 ngo5 laa1
+qua Tội nghiệp =gam3 jam1 gung1?
+Ừ, neu  cho nó biết tôi còn ăn vụng=hai6 aa3, bei2 keoi5 zi1 dou3 ngo5 zoi3 tau1 sik6 ge3 waa6<br>再 (zoi3) : encore<br>偷食 (tau1 sik6) : “manger en cachette” → tromper (en relation)<br>嘅話 (ge3 waa6) : si / if
+tôi that su bị xé xác thành muôn mảnh cũng không xong.=ngo5 zan1 hai6 seoi3 si1 maan6 dyun6 dou1 m4 dim6 aa3 <br>(chấn hày sơi sí mạn  tú ùm tịm à)<br>碎屍萬段 (seoi3 si1 maan6 dyun6) : “découpé en dix mille morceaux”<br>都 (dou1) : même<br>唔掂 (m4 dim6) : pas réglé<br>碎 (seoi3) : smash / shatter / break into pieces<br>屍 (si1) : dead body<br>萬 (maan6) : ten thousand<br>段 (dyun6) : pieces / sections
+Bạn có phải là không muốn qua biển không? =nei5 hai6 mai6 m4 soeng2 gwo3 hoi2 aa3
+đưa thêm 500 đồng cho mày nhé =sing2 dou1 ng5 gau6 seoi2 bei2 nei5 laa3 <br> (sỉnh tú ùm càu sơi bị lị la)
+Cứu ma như cứu hỏa =gau3 gwai2 jyu4 gau3 fo2<br>((Cứu người như cứu hỏa : gau3 jan4 jyu4 gau3 fo2))
+Xin lỗi nhé, đổi ca (đến giờ giao ca rồi)=m4 hou2 ji3 si1 aa3. , gaau1 gaang1 
+Có nhầm không vậy anh,? đổi ca =gaau2 co3 aa1 lei5,?  gaau1 gaang1 
+
+
+
+`;
+
+// ======================
+// TABLEAU
+// ======================
+
+let vocabulaire = [];
+
+let lignes = texte.trim().split("\n");
+
+for(let ligne of lignes){
+    // Ignorer les lignes qui commencent par //
+    if(ligne.trim().startsWith("//")) continue;
+    
+    let morceaux = ligne.split("=");
+
+    let question = morceaux[0]?.trim() || "";
+    let reponse1 = morceaux[1]?.trim() || "";
+    let reponse2 = morceaux[2]?.trim() || "";
+
+    if(question && reponse1) {
+        vocabulaire.push([
+            question,
+            reponse1,
+            reponse2
+        ]);
+    }
+}
+
+// ======================
+// VARIABLES
+// ======================
+
+let indexQuestion = 0;
+let questionActuelle = "";
+let bonneReponse1 = "";
+let bonneReponse2 = "";
+
+// ======================
+// EFFACER REPONSE AFFICHEE
+// ======================
+
+function effacerReponseAffichee() {
+    const reponseAffichee = document.getElementById("reponse-affichee");
+    reponseAffichee.style.display = "none";
+    reponseAffichee.innerHTML = "";
+}
+
+// ======================
+// CHARGER UNE QUESTION
+// ======================
+
+function chargerQuestion(){
+    if(vocabulaire.length === 0) return;
+    
+    questionActuelle = vocabulaire[indexQuestion][0];
+    bonneReponse1 = vocabulaire[indexQuestion][1];
+    bonneReponse2 = vocabulaire[indexQuestion][2];
+
+    document.getElementById("question").innerHTML = 
+        "<span class='emoji'>📝</span> <span class='question-label'>Traduction de :</span>" +
+        "<b>" + questionActuelle + "</b>" +
+        "<div class='question-counter'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</div>";
+    
+    // Cacher la réponse quand on change de question
+    effacerReponseAffichee();
+}
+
+// ======================
+// AFFICHER LA REPONSE
+// ======================
+
+function afficherReponse() {
+    let reponseAffichee = document.getElementById("reponse-affichee");
+    
+    if(bonneReponse2 !== "") {
+        reponseAffichee.innerHTML = "<span class='reponse-label'>Réponse :</span><b>" + bonneReponse1 + "</b> ou <b>" + bonneReponse2 + "</b>";
+    } else {
+        reponseAffichee.innerHTML = "<span class='reponse-label'>Réponse :</span><b>" + bonneReponse1 + "</b>";
+    }
+    
+    reponseAffichee.style.display = "block";
+}
+
+// ======================
+// QUESTION SUIVANTE
+// ======================
+
+function questionSuivante() {
+    if(indexQuestion < vocabulaire.length - 1) {
+        indexQuestion++;
+        chargerQuestion();
+    } else {
+        // Retour à la première question
+        indexQuestion = 0;
+        chargerQuestion();
+        
+        const msg = document.createElement("div");
+        msg.innerHTML = "🔄 Retour à la première question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.left = "50%";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.backgroundColor = "#1a2533";
+        msg.style.color = "#fbbf24";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.95";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// QUESTION PRECEDENTE
+// ======================
+
+function questionPrecedente() {
+    if(indexQuestion > 0) {
+        indexQuestion--;
+        chargerQuestion();
+    } else {
+        // Aller à la dernière question
+        indexQuestion = vocabulaire.length - 1;
+        chargerQuestion();
+        
+        const msg = document.createElement("div");
+        msg.innerHTML = "🔄 Retour à la dernière question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.left = "50%";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.backgroundColor = "#1a2533";
+        msg.style.color = "#fbbf24";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.95";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// TOUCHES FLECHEES
+// ======================
+
+document.addEventListener("keydown", function(event) {
+    if(event.key === "ArrowLeft") {
+        event.preventDefault();
+        questionPrecedente();
+    } else if(event.key === "ArrowRight") {
+        event.preventDefault();
+        questionSuivante();
+    }
+});
+
+// ======================
+// DEMARRAGE
+// ======================
+
+// Vérifier qu'on a des questions
+if(vocabulaire.length === 0) {
+    document.getElementById("question").innerHTML = "❌ Erreur : Aucune question trouvée!";
+} else {
+    chargerQuestion();
+}
+
+</script>
+
+</body>
+</html>
