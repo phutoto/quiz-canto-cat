@@ -32,14 +32,22 @@
             color: white;
             margin-bottom: 10px;
             font-size: 1.8rem;
+			white-space: nowrap; /* AJOUTEZ CETTE LIGNE */
         }
 
         .subtitle {
             text-align: center;
-            color: #a0a0a0;
+            color: #de6262;
             margin-bottom: 30px;
             font-size: 0.9rem;
         }
+		
+		.subtitle a {
+    color: #f0a500; /* Changez cette couleur selon vos préférences */
+    text-decoration: none;
+    font-weight: bold;
+}
+
 
         .menu {
             display: flex;
@@ -91,9 +99,16 @@
     </style>
 </head>
 <body>
+
+
     <div class="container">
         <h1>💧->🏔->💧 Quiz Cantonais 💧->🏔->💧</h1>
-        <div class="subtitle">Apprenez en vous amusant</div>
+        <!-- <div class="subtitle">Apprenez en vous amusant</div> -->
+		<div class="subtitle"><!-- Lien retour vers l'accueil -->
+        <a href="../index.html">
+            ← Retour au menu
+        </a></div>
+		
 
         <div class="menu">
 		
@@ -149,9 +164,7 @@
                 <span class="btn-icon">🎨</span>
                 <span class="btn-title">RockyNg</span>
                 <span class="btn-arrow">→</span>
-            </a>
-			
-			
+            </a>		
 			
 			<!-- ============================================= -->
             <!--           BOUTON Menu-哈攪 Ha Factor                 -->
@@ -159,6 +172,15 @@
             <a href="哈攪 Ha Factor/A-Menu-Ha-Factor.html" class="btn">
                 <span class="btn-icon">🎨</span>
                 <span class="btn-title">哈攪 Ha Factor</span>
+                <span class="btn-arrow">→</span>
+            </a>
+			
+			<!-- ============================================= -->
+            <!--           BOUTON Menu-Yelubomwon Yu                 -->
+            <!-- ============================================= -->
+            <a href="Yelubomwon/A-MenuYelu.html" class="btn">
+                <span class="btn-icon">🎨</span>
+                <span class="btn-title">Yelubomwon</span>
                 <span class="btn-arrow">→</span>
             </a>
 			
