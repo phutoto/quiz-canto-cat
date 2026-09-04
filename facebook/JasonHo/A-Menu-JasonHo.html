@@ -1,244 +1,440 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>💧->🏔->💧 Quiz Cantonais 💧->🏔->💧</title>
-    <style>
-        * 
-		
-		
-		
-		
-		{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Jason Ho</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+<style>
 
-        .container {
-            max-width: 500px;
-            width: 100%;
-            margin: 0 auto;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Bouton retour */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            color: white;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            transition: background 0.2s;
-        }
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background: #0a0c10;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    color: #eef2ff;
+}
 
-        .back-btn:hover {
-            background: rgba(255,255,255,0.2);
-        }
+#box {
+    background: #0e1117;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border-left: 1px solid rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255,255,255,0.03);
+}
 
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-        }
+/* Sur les grands écrans (ordinateurs), on peut limiter un peu */
+@media (min-width: 768px) {
+    #box {
+        max-width: 780px;
+        margin: 2rem auto;
+        border-radius: 2rem;
+        min-height: auto;
+        background: #11151c;
+        box-shadow: 0 25px 45px -12px rgba(0,0,0,0.8);
+        border: 1px solid #1e2838;
+    }
+    
+    body {
+        padding: 0 1rem;
+    }
+}
 
-        .subtitle {
-            text-align: center;
-            color: #a0a0a0;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
-        }
+.nav-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
 
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.nav-group button {
+    flex: 1;
+    background: #10141c;
+    color: #cbd5e6;
+    border: 1px solid #1e2a3a;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
 
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: transform 0.2s, background 0.2s;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+.nav-group button:hover {
+    background: #1a222e;
+    border-color: #3b6e9e;
+    color: white;
+}
 
-        .btn:hover {
-            transform: translateX(5px);
-            background: rgba(255,255,255,0.2);
-        }
+.nav-group button:active {
+    transform: scale(0.98);
+}
 
-        .btn-icon {
-            font-size: 1.5rem;
-        }
+#question {
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin: 1.2rem 0 1rem;
+    line-height: 1.4;
+    background: #0c0f14;
+    padding: 1.8rem;
+    border-radius: 1.5rem;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-align: center;
+}
 
-        .btn-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-            flex: 1;
-            margin-left: 15px;
-        }
+#question b {
+    font-weight: 600;
+    background: linear-gradient(120deg, #3b82f6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.8rem;
+}
 
-        .btn-arrow {
-            color: #f0a500;
-            font-size: 1.2rem;
-        }
+.btn-reponse {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #2a3a4a;
+    border-radius: 1.2rem;
+    transition: all 0.2s;
+    background: #171c24;
+    color: #cbd5e6;
+    margin-top: 1.2rem;
+    font-family: inherit;
+}
 
-        footer {
-            text-align: center;
-            color: #666;
-            margin-top: 40px;
-            font-size: 0.7rem;
-        }
-    </style>
+.btn-reponse:hover {
+    background: #1e2a36;
+    border-color: #3b6e9e;
+    color: white;
+}
+
+.btn-reponse:active {
+    transform: scale(0.98);
+}
+
+#reponse-affichee {
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+    background: #0c1017;
+    border-left: 5px solid #f59e0b;
+    border-radius: 1.2rem;
+    display: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fbbf24;
+    border: 1px solid #3e2a1e;
+    box-shadow: 0 6px 12px -8px black;
+}
+
+#reponse-affichee b {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    font-size: 1.8rem;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+	 white-space: nowrap; /* AJOUTEZ CETTE LIGNE */
+}
+
+.lucky-char {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 4px rgba(239,68,68,0.5));
+}
+
+.question-counter {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 1rem;
+    color: #f59e0b;
+}
+
+.emoji {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 2px rgba(245,158,11,0.5));
+}
+
+.question-label {
+    display: block;
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+.reponse-label {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 0.25rem;
+}
+
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Lien retour vers l'accueil -->
-        <a href="../MenuFacebook.html" class="back-btn">
-            ← Retour au menu
-        </a>
 
-        <h1>💧->🏔->💧 JasonHo 💧->🏔->💧</h1>
-        <div class="subtitle">Sélectionnez votre quiz</div>
+<div id="box">
 
-        <div class="menu">
-         
-		    <!-- ============================================= -->
-            <!--                    JasonHo 1                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-1.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">1-Cái này là bánh phân bò</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 2                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-2.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">2-Luộc một quả trứng gà mất 10 phút</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 3                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-3.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">3-Mẹ ơi, con muốn đi ị </span>
-                <span class="btn-arrow">→</span>
-            </a>
-		
-				<!-- ============================================= -->
-            <!--                    JasonHo 4                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-4.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">4-mẹ dạy em nấu cơm như thế nào</span>
-                <span class="btn-arrow">→</span>
-            </a>
-		
-			<!-- ============================================= -->
-            <!--                    JasonHo 5                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-5.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">5-Hai người siêu điên khùng á!</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 6                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-6.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">6-anh chàng đó không có tiền đâu</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 7                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-7.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">7- bác sĩ dựa vào cái gì để kiếm cơm</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 8                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-8.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">8-nếu con có 100 ngàn </span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 9                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-9.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">9-đem để trên bồn cầu đi </span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 10                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-10.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">10-là ai rửa chén vậy ạ</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 11                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-11.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">11-nhưng tính tình cọc cằn</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-			<!-- ============================================= -->
-            <!--                    JasonHo 12                       -->
-            <!-- ============================================= -->
-            <a href="JasonHo-12.html" class="btn">
-                <span class="btn-icon">🐱</span>
-                <span class="btn-title">12-chị thiếu em 100 đồng</span>
-                <span class="btn-arrow">→</span>
-            </a>
-			
-        </div>
+<h2>
+    <span class="lucky-char">福💧->🏔->💧</span>
+    Jason Ho
+    <span class="lucky-char">💧->🏔->💧祿</span>
+</h2>
 
-        <footer>
-            Cliquez sur un quiz pour commencer
-        </footer>
-    </div>
+<h4>
+<center>
+<span class="lucky-char2">13-Chú đuổi theo cháu làm gì</span></center>
+</h4>
+
+<div id="question"></div>
+
+<div class="nav-group">
+    <button onclick="questionPrecedente()">◀ Précédente</button>
+    <button onclick="questionSuivante()">Suivante ▶</button>
+</div>
+
+<button class="btn-reponse" onclick="afficherReponse()">👁 Afficher la réponse</button>
+
+<div id="reponse-affichee"></div>
+
+</div>
+
+<script>
+
+// ======================
+// VOCABULAIRE --- A SAISIR ICI
+// Format :
+// question=reponse1=reponse2
+// reponse2 est optionnelle
+// ======================
+
+let texte = `
+
+Ông chủ, giúp cháu xem chỗ này bao nhiêu tiền?=Lou5 saai3, bong1 ngo5 tai2 haa5 ni1 dou6 gei2 cin2?
+Chỗ này 8 đồng .=Ni1 dou6 baat3 man1 zaa3.
+Này, tờ 10 đồng đây ạ.=Naa4, sap6 man1 zai2. <br>zai2 (紙): Tờ tiền giấy (rút ngắn của zi2 bai6 - 紙幣 / tiền giấy)
+không có 2 đồng tiền lẻ rồi, =Mou5 loeng5 man1 saan2 zi2 wo3, <br>saan2 zi2 (散紙): Tiền lẻ (trong đó saan2 là tán/lẻ, zi2 là giấy/tiền)
+bạn, Thôi thì, lấy, quả, trái cây, xem như xong=nei5, sei3 daan3, lo2, go3, saang1 gwo2, syun3 laa1!<br>sei3 daan3 : Thôi thì... <br>lo2 (攞) -> Lấy<br>go3 (個) -> Một quả / Một cái (trợ từ chỉ số lượng)<br>saang1 gwo2 (水果) -> Trái cây / Hoa quả<br>syun3 laa1 (算啦) -> Xem như xong /Cho xong
+bạn thích ăn cái gì, bất kỳ , lấy cái đó =Nei5 zung1 ji3 sik6 me1, si4 daan3 lo2 go3 laa1!<br>sei6 daan6 : tùy, đại khái, bất kỳ<br>lo2 : lấy<br>
+này này! Đừng có làm lung tung nhé!=wai3 wai3! M4 hai4 lyun6 lai4 aa3!<br>lyun6 : lung tung, bừa bãi<br>lai4 : làm / làm như vậy
+làm chuyện tào lao hả, hai đứa tụi bay!, =Zong1 gwai2 aa3, nei5 loeng5 go3, <br>Zong1(Giả vờ,  Làm trò) gwai2 (Ma, quỷ) (裝鬼): giở trò ma mãnh, làm chuyện tào lao.
+tôi thiếu bạn 2 đồng thôi mà!=ngo5 zaang1 nei5 loeng5 man1 zaa3!
+Chú đuổi theo cháu làm gì?=Nei5 zeoi1 ngo5 zou6 me1 aa3?<br>zeoi1 : đuổi theo
+ Là bạn tự,  nói , lấy bất kì  một quả !=Hai6 nei5 zi6 gei2, waa6 sei3 daan3 lo2 jat1 go3 gaa3!<br>sei6 daan6 : tùy, đại khái, bất kỳ
+
+
+
+`;
+
+// ======================
+// TABLEAU
+// ======================
+
+let vocabulaire = [];
+
+let lignes = texte.trim().split("\n");
+
+for(let ligne of lignes){
+    // Ignorer les lignes qui commencent par //
+    if(ligne.trim().startsWith("//")) continue;
+    
+    let morceaux = ligne.split("=");
+
+    let question = morceaux[0]?.trim() || "";
+    let reponse1 = morceaux[1]?.trim() || "";
+    let reponse2 = morceaux[2]?.trim() || "";
+
+    if(question && reponse1) {
+        vocabulaire.push([
+            question,
+            reponse1,
+            reponse2
+        ]);
+    }
+}
+
+// ======================
+// VARIABLES
+// ======================
+
+let indexQuestion = 0;
+let questionActuelle = "";
+let bonneReponse1 = "";
+let bonneReponse2 = "";
+
+// ======================
+// EFFACER REPONSE AFFICHEE
+// ======================
+
+function effacerReponseAffichee() {
+    const reponseAffichee = document.getElementById("reponse-affichee");
+    reponseAffichee.style.display = "none";
+    reponseAffichee.innerHTML = "";
+}
+
+// ======================
+// CHARGER UNE QUESTION
+// ======================
+
+function chargerQuestion(){
+    if(vocabulaire.length === 0) return;
+    
+    questionActuelle = vocabulaire[indexQuestion][0];
+    bonneReponse1 = vocabulaire[indexQuestion][1];
+    bonneReponse2 = vocabulaire[indexQuestion][2];
+
+    document.getElementById("question").innerHTML = 
+        "<span class='emoji'>📝</span> <span class='question-label'>Traduction de :</span>" +
+        "<b>" + questionActuelle + "</b>" +
+        "<div class='question-counter'>(" + (indexQuestion + 1) + "/" + vocabulaire.length + ")</div>";
+    
+    // Cacher la réponse quand on change de question
+    effacerReponseAffichee();
+}
+
+// ======================
+// AFFICHER LA REPONSE
+// ======================
+
+function afficherReponse() {
+    let reponseAffichee = document.getElementById("reponse-affichee");
+    
+    if(bonneReponse2 !== "") {
+        reponseAffichee.innerHTML = "<span class='reponse-label'>Réponse :</span><b>" + bonneReponse1 + "</b> ou <b>" + bonneReponse2 + "</b>";
+    } else {
+        reponseAffichee.innerHTML = "<span class='reponse-label'>Réponse :</span><b>" + bonneReponse1 + "</b>";
+    }
+    
+    reponseAffichee.style.display = "block";
+}
+
+// ======================
+// QUESTION SUIVANTE
+// ======================
+
+function questionSuivante() {
+    if(indexQuestion < vocabulaire.length - 1) {
+        indexQuestion++;
+        chargerQuestion();
+    } else {
+        // Retour à la première question
+        indexQuestion = 0;
+        chargerQuestion();
+        
+        const msg = document.createElement("div");
+        msg.innerHTML = "🔄 Retour à la première question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.left = "50%";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.backgroundColor = "#1a2533";
+        msg.style.color = "#fbbf24";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.95";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// QUESTION PRECEDENTE
+// ======================
+
+function questionPrecedente() {
+    if(indexQuestion > 0) {
+        indexQuestion--;
+        chargerQuestion();
+    } else {
+        // Aller à la dernière question
+        indexQuestion = vocabulaire.length - 1;
+        chargerQuestion();
+        
+        const msg = document.createElement("div");
+        msg.innerHTML = "🔄 Retour à la dernière question";
+        msg.style.position = "fixed";
+        msg.style.bottom = "20px";
+        msg.style.left = "50%";
+        msg.style.transform = "translateX(-50%)";
+        msg.style.backgroundColor = "#1a2533";
+        msg.style.color = "#fbbf24";
+        msg.style.padding = "10px 20px";
+        msg.style.borderRadius = "25px";
+        msg.style.fontSize = "14px";
+        msg.style.zIndex = "1000";
+        msg.style.opacity = "0.95";
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 1500);
+    }
+}
+
+// ======================
+// TOUCHES FLECHEES
+// ======================
+
+document.addEventListener("keydown", function(event) {
+    if(event.key === "ArrowLeft") {
+        event.preventDefault();
+        questionPrecedente();
+    } else if(event.key === "ArrowRight") {
+        event.preventDefault();
+        questionSuivante();
+    }
+});
+
+// ======================
+// DEMARRAGE
+// ======================
+
+// Vérifier qu'on a des questions
+if(vocabulaire.length === 0) {
+    document.getElementById("question").innerHTML = "❌ Erreur : Aucune question trouvée!";
+} else {
+    chargerQuestion();
+}
+
+</script>
+
 </body>
 </html>
